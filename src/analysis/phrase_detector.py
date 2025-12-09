@@ -7,7 +7,7 @@ class PhraseBoundaryDetector:
         self.sr = sr
 
     def detect_periodicity(self, y, min_period=8.0, max_period=12.0):
-    hop_length = 2048
+        hop_length = 2048
     
     onset_env = librosa.onset.onset_strength(
         y=y, 
