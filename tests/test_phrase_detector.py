@@ -51,8 +51,9 @@ class TestPhraseDetector(unittest.TestCase):
         target_period = 10.0
         signal = self.generate_test_signal(period_seconds=target_period)
         
+        # Use wide search window to match production code
         detected_period, times, ac_norm = self.detector.detect_periodicity(
-            signal, min_period=8.0, max_period=12.0
+            signal, min_period=3.0, max_period=20.0
         )
         
         error = abs(detected_period - target_period)
