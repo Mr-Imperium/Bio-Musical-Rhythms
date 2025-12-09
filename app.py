@@ -12,7 +12,6 @@ import matplotlib.pyplot as plt
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
-# Assume these classes exist in your project structure
 from src.analysis.signal_processing import SpectralAnalyzer
 from src.analysis.mayer_metric import calculate_mayer_score
 from src.analysis.biomimetic_model import BaroreflexSimulator
@@ -26,19 +25,15 @@ st.title("Bio-Musical Rhythms")
 
 def run_phrase_detection(y_p, sr_p, uploaded_file_name="Uploaded File"):
     try:
-        # Assuming the necessary import is available
         from src.analysis.phrase_detector import PhraseBoundaryDetector 
 
         detector = PhraseBoundaryDetector(sr=sr_p)
-
-        # Detect the period
         period, times, ac_norm = detector.detect_periodicity(
             y_p, min_period=8.0, max_period=12.0
         )
 
         st.success(f"✓ Analysis Complete: **{uploaded_file_name}**")
 
-        # Display results
         col1, col2, col3 = st.columns(3)
 
         with col1:
@@ -72,7 +67,6 @@ def run_phrase_detection(y_p, sr_p, uploaded_file_name="Uploaded File"):
                 help="The frequency corresponding to this period"
             )
 
-        # Plot autocorrelation
         st.subheader("Autocorrelation of Onset Envelope")
         st.markdown("""
         **How to read this:** A peak at ~10 seconds indicates strong structural repetition.
@@ -92,7 +86,7 @@ def run_phrase_detection(y_p, sr_p, uploaded_file_name="Uploaded File"):
             title="Structural Periodicity Detection"
         )
 
-        # Highlight the target zone
+
         fig_ac.add_vrect(
             x0=8.0, x1=12.0, 
             fillcolor="green", 
@@ -101,7 +95,6 @@ def run_phrase_detection(y_p, sr_p, uploaded_file_name="Uploaded File"):
             annotation_position="top left"
         )
 
-        # Mark the detected peak
         fig_ac.add_vline(
             x=period, 
             line_dash="dash", 
@@ -111,7 +104,6 @@ def run_phrase_detection(y_p, sr_p, uploaded_file_name="Uploaded File"):
 
         st.plotly_chart(fig_ac, use_container_width=True)
 
-        # Show interpretation
         st.subheader("Interpretation")
         if 9.0 <= period <= 11.0:
             st.success(f"""
@@ -131,7 +123,7 @@ def run_phrase_detection(y_p, sr_p, uploaded_file_name="Uploaded File"):
             - Could still have musical/emotional effects through other mechanisms
             """)
         
-        return period # Return period for validation step
+        return period 
     
     except Exception as e:
         st.error(f"Error during phrase detection: {e}")
@@ -152,7 +144,6 @@ with tab1:
             temp_path = tmp_file.name
         
         try:
-            # FIX 1: Removed 'sr=44100'
             analyzer = SpectralAnalyzer()
             y = analyzer.load_and_preprocess(temp_path)
             envelope = analyzer.extract_envelope(y)
@@ -193,7 +184,7 @@ with tab2:
     with col_d:
         mod_depth = st.slider("Modulation Depth (0-1)", 0.1, 1.0, 0.5, step=0.05, help="How pronounced the rhythmic cycle is on the volume/pitch.")
 
-    if st.button("✨ Generate Bio-Resonance Audio"):
+    if st.button(" Generate Bio-Resonance Audio"):
         with st.spinner("Synthesizing waveforms..."):
             composer = BioResonanceComposer()
             
@@ -277,7 +268,6 @@ with tab4:
 
     st.markdown("###  Quick Demo")
         
-    # Map to your demo files
     demo_files = {
         "La donna è mobile (Pavarotti)": "data/demo/verdi_donna.wav",
         "Va, pensiero (Verdi)": "data/demo/verdi_va_pensiero.wav",
@@ -330,16 +320,14 @@ with tab4:
             st.error(f"Error during audio loading/phrase detection: {e}")
             st.code(str(e))
         finally:
-            # Clean up the temp file if it was created from upload
             if temp_path_p and temp_path_p not in demo_files.values():
                 os.remove(temp_path_p)
                 temp_path_p = None
 
-    # Update temp_path_p if data was successfully loaded (either by demo or upload)
+
     if "last_audio_data_p" in st.session_state:
         _y, _sr, temp_path_p, _name = st.session_state["last_audio_data_p"]
 
-    # --- Tempo Validation Demonstration ---
     st.markdown("---")    
     st.subheader(" Tempo-Invariance Validation")    
     st.markdown("""    
@@ -353,7 +341,6 @@ with tab4:
                 try:                
                     from src.analysis.tempo_validation import validate_tempo_invariance                                
                     
-                    # Run validation (uses temp_path_p set by the last successful load/upload)
                     df_validation = validate_tempo_invariance(
                         temp_path_p,                     
                         speed_factors=[0.8, 0.9, 1.0, 1.1, 1.2]
@@ -361,10 +348,8 @@ with tab4:
                     
                     st.success("✓ Tempo validation complete")                                
                     
-                    # Display table
                     st.dataframe(df_validation, use_container_width=True)                                
                     
-                    # Plot results
                     fig_val = go.Figure()                                
                     
                     fig_val.add_trace(go.Scatter(
@@ -393,7 +378,6 @@ with tab4:
 
                     st.plotly_chart(fig_val, use_container_width=True)                                
                     
-                    # Calculate average error
                     avg_error = df_validation["Error (s)"].mean()
                     max_error = df_validation["Error (s)"].max()                                
                     
