@@ -86,12 +86,9 @@ with tab2:
             except AttributeError:
                 composer_sr = 44100
                 
-            # FIX: Temporarily remove mod_freq and mod_depth to identify the issue
             _, audio_data = composer.generate_therapeutic_drone(
                 duration_sec=duration, 
                 carrier_freq=freq
-                # mod_freq=mod_freq, # Removed
-                # mod_depth=mod_depth # Removed
             )
             
             out_file = "generated_therapy.wav"
@@ -100,8 +97,7 @@ with tab2:
             st.success("Audio Generated!")
             st.audio(out_file)
             
-            # Note: Visualization will use default mod_freq if none is passed
-            viz_mod_freq = mod_freq # Keep the slider value for display
+            viz_mod_freq = mod_freq 
             st.subheader(f"Modulation Visualization (Cycle: {1/viz_mod_freq:.1f} seconds)")
             
             step = composer_sr // 100
@@ -115,28 +111,40 @@ with tab3:
     uploaded_file_s = st.file_uploader("Upload Audio File (WAV, MP3)", type=["wav", "mp3"], key="structural_uploader")
     
     if uploaded_file_s is not None:
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp_file_s:
-            tmp_file_s.write(uploaded_file_s.getbuffer())
-            temp_path_s = tmp_file_s.name
         
-        try:
-            y_s, sr_s = librosa.load(temp_path_s, sr=None)
+        if uploaded_file_s.size > 26214400:
+             st.error("File is too large for reliable Spectrogram generation. Please upload a file smaller than 25MB.")
+             uploaded_file_s = None # Reset the file handle to prevent further processing
+          
+        else:
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp_file_s:
+                tmp_file_s.write(uploaded_file_s.getbuffer())
+                temp_path_s = tmp_file_s.name
             
-            st.success(f"File loaded for structural analysis: **{uploaded_file_s.name}**")
+            try:
+        
+                y_s, sr_s = librosa.load(temp_path_s, sr=None)
+                
+                st.success(f"File loaded for structural analysis: **{uploaded_file_s.name}**")
+                
+                D = librosa.stft(y_s)
+                S_db = librosa.amplitude_to_db(np.abs(D), ref=np.max)
+                
+                # Create the Matplotlib figure
+                fig_plt, ax = plt.subplots(figsize=(10, 4))
+                img = librosa.display.specshow(S_db, x_axis='time', y_axis='log', sr=sr_s, ax=ax)
+                ax.set_title('Spectrogram (Time-Frequency View)')
+                fig_plt.colorbar(img, format="%+2.f dB")
+                
+                st.pyplot(fig_plt)
+                
+            except Exception as e:
+                st.error(f"Error during structural analysis: {e}")
+                st.warning("This could be due to a corrupt file or a missing library dependency (like FFmpeg).")
             
-            D = librosa.stft(y_s)
-            S_db = librosa.amplitude_to_db(np.abs(D), ref=np.max)
-            
-            fig_plt, ax = plt.subplots(figsize=(10, 4))
-            # FIX 3: Ensure sr_s is passed to specshow for correct time/frequency scaling
-            img = librosa.display.specshow(S_db, x_axis='time', y_axis='log', sr=sr_s, ax=ax)
-            ax.set_title('Spectrogram (Time-Frequency View)')
-            fig_plt.colorbar(img, format="%+2.f dB")
-            
-            st.pyplot(fig_plt)
-            
-        except Exception as e:
-            st.error(f"Error during structural analysis: {e}")
+            finally:
+                plt.close(fig_plt)
+                os.remove(temp_path_s)
         
         finally:
             os.remove(temp_path_s)
