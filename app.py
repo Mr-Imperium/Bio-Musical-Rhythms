@@ -36,7 +36,8 @@ with tab1:
             temp_path = tmp_file.name
         
         try:
-            analyzer = SpectralAnalyzer(sr=44100)
+            # FIX 1: Removed 'sr=44100'
+            analyzer = SpectralAnalyzer()
             y = analyzer.load_and_preprocess(temp_path)
             envelope = analyzer.extract_envelope(y)
             freqs, powers = analyzer.compute_psd(envelope)
@@ -78,7 +79,15 @@ with tab2:
 
     if st.button("✨ Generate Bio-Resonance Audio"):
         with st.spinner("Synthesizing waveforms..."):
-            composer = BioResonanceComposer(sr=44100)
+            # FIX 2: Removed 'sr=44100'
+            composer = BioResonanceComposer()
+            
+            # Assuming BioResonanceComposer has a 'sr' attribute for visualization
+            try:
+                composer_sr = composer.sr 
+            except AttributeError:
+                composer_sr = 44100 # Fallback if sr attribute is not present
+                
             _, audio_data = composer.generate_therapeutic_drone(
                 duration_sec=duration, 
                 carrier_freq=freq,
@@ -93,10 +102,10 @@ with tab2:
             
             st.subheader(f"Modulation Visualization (Cycle: {1/mod_freq:.1f} seconds)")
             # Downsample for plot visualization (100 samples per second)
-            step = composer.sr // 100
+            step = composer_sr // 100
             viz_data = audio_data[::step]
             # Limit to the first 10 cycles for clarity
-            max_points = int(10 * composer.sr * (1 / mod_freq) / step)
+            max_points = int(10 * composer_sr * (1 / mod_freq) / step)
             st.line_chart(viz_data[:max_points])
 
 with tab3:
@@ -119,6 +128,7 @@ with tab3:
             S_db = librosa.amplitude_to_db(np.abs(D), ref=np.max)
             
             fig_plt, ax = plt.subplots(figsize=(10, 4))
+            # FIX 3: Ensure sr_s is passed to specshow for correct time/frequency scaling
             img = librosa.display.specshow(S_db, x_axis='time', y_axis='log', sr=sr_s, ax=ax)
             ax.set_title('Spectrogram (Time-Frequency View)')
             fig_plt.colorbar(img, format="%+2.f dB")
