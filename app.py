@@ -276,7 +276,7 @@ with tab4:
     demo_files = {
         "La donna è mobile (Pavarotti)": "data/demo/verdi_donna.wav",
         "Va, pensiero (Verdi)": "data/demo/verdi_va_pensiero.wav",
-        "Beethoven 9th Adagio": :"data/demo/beethoven_9th_adagio.wav"
+        "Beethoven 9th Adagio": "data/demo/beethoven_9th_adagio.wav"
     }
 
     demo_option = st.selectbox(
