@@ -19,38 +19,36 @@ bio-musical-rhythms/
 ├── config/
 │   └── analysis_config.yaml    
 ├── src/
-│   ├── data_acquisition/       
-│   ├── analysis/              
-│   ├── visualization/         
+│   ├── analysis/               
+│   │   ├── phrase_detector.py  
+│   │   ├── tempo_validation.py 
+│   │   ├── signal_processing.py
+│   │   └── biomimetic_model.py 
+│   ├── generation/             
+│   ├── visualization/          
 │   └── main.py                 
 ├── tests/                      
 ├── data/                      
 └── results/
-    ├── mayer_scores.csv       
-    └── figures/               
+    ├── tempo_validation.csv    
+    └── figures/                       
 ```
-## Methodology
-1. The Signal Processing Chain
+### 1. The Entrainment Paradox
+Our initial spectral analysis revealed a divergence:
+*   **Acoustic Envelope:** Dominated by VLF drift (~0.03 Hz).
+*   **Physiological Response:** Occurs at 0.1 Hz (Mayer Waves).
+*   **Conclusion:** Entrainment is driven by **structural timing** (phrase boundaries), not raw acoustic power.
 
-To detect low-frequency breathing rhythms (0.1 Hz) inside high-frequency audio (22,050 Hz), we implemented the following Digital Signal Processing (DSP) chain:
+### 2. Time-Domain Phrase Detection (The Solution)
+To capture the 10-second cycle described by Dr. Krishna ("4 phrases of 2.5s"), we implemented a **Phrase Boundary Detector** (`src/analysis/phrase_detector.py`) using **Onset Autocorrelation**.
+*   **Mechanism:** It computes the autocorrelation of the Onset Strength Envelope to find repetition cycles in the 8-12s window.
+*   **Result:** Correctly identifies the 10.0s block in Pavarotti's *La donna è mobile* despite low spectral energy at 0.1 Hz.
 
-Analytic Signal Extraction: We use the Hilbert Transform to extract the instantaneous amplitude envelope of the waveform.
+### 3. Tempo-Invariance Validation
+To prove the method detects structure (not artifacts), we implemented a validation module (`src/analysis/tempo_validation.py`).
+*   **Test:** Artificially stretch audio by 0.8x - 1.2x.
+*   **Outcome:** The detected period scales inversely with speed (e.g., 10s $\rightarrow$ 8.3s at 1.2x speed), confirming robust structural tracking.
 
-                                             E(t)=∣H(x(t))∣
-
-Decimation: The envelope is downsampled to 10 Hz. This acts as a low-pass filter, removing audio frequencies while preserving structural volume dynamics.
-
-Power Spectral Density (PSD): We utilize Welch's Method (Hanning window, 1024-sample segments) to estimate the power distribution of the volume dynamics.
-
-The "Mayer Score": A custom metric calculating the ratio of power within the baroreflex band (0.05 - 0.15 Hz) relative to total low-frequency power.
-
-2. Validation (Unit Testing)
-
-Before analyzing real music, the system was verified against synthetic data.
-
-Test Case A: Pure 0.1 Hz Sine Wave → System detected 0.10 Hz (Pass).
-
-Test Case B: 0.5 Hz Fast Rhythm → System returned low Mayer Score (Pass).
 
 ## Results & Analysis
 Figure 1: Structural Analysis (Verdi: Va Pensiero)
@@ -142,7 +140,7 @@ Running Tests
 python -m unittest discover tests
 ```
 
-# References
+##  References
+1.  **Bernardi, L., et al. (2009).** *Cardiovascular, cerebrovascular, and respiratory changes induced by different types of music in musicians and non-musicians: the importance of silence.* Heart, 92(4), 445-452.
+2.  **Sleight, P.** (2016). *Music and the cardiovascular system.* Nature Reviews Cardiology.
 
-Bernardi, L., et al. (2009). Cardiovascular, cerebrovascular, and respiratory changes induced by different types of music in musicians and non-musicians: the importance of silence. Heart, 92(4), 445-452.
-Sleight, P. (2015). Music and the heart. European Heart Journal. PMID: 26413596.
