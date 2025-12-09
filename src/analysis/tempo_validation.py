@@ -18,8 +18,8 @@ def validate_tempo_invariance(file_path, speed_factors=[0.8, 0.9, 1.0, 1.1, 1.2]
     print(f"\n=== Tempo-Invariant Validation: {file_path} ===\n")
     
     # STEP 1: Detect actual base period from original audio with WIDE search window
-    # Use very wide range to catch any reasonable phrase structure (3s to 20s)
-    base_period, _, _ = detector.detect_periodicity(y, min_period=3.0, max_period=20.0)
+    # Use very wide range to catch any reasonable phrase structure (2s to 25s)
+    base_period, _, _ = detector.detect_periodicity(y, min_period=2.0, max_period=25.0)
     print(f"Calibrated base period: {base_period:.2f}s\n")
     
     # If detection failed, fall back to 10.0s assumption
@@ -34,13 +34,13 @@ def validate_tempo_invariance(file_path, speed_factors=[0.8, 0.9, 1.0, 1.1, 1.2]
         # Expected period scales inversely with speed
         expected_period = base_period / speed
         
-        # Use PROPORTIONAL margin (30% of expected period) instead of fixed margin
-        # This works better for both short and long periods
-        margin_ratio = 0.35
-        min_search = max(2.0, expected_period * (1 - margin_ratio))
+        # Use TIGHT margin (15%) to prevent harmonic jumping
+        # This keeps detection close to the expected period
+        margin_ratio = 0.15
+        min_search = max(1.5, expected_period * (1 - margin_ratio))
         max_search = expected_period * (1 + margin_ratio)
         
-        print(f"Speed {speed}×: Searching [{min_search:.1f}s, {max_search:.1f}s]")
+        print(f"Speed {speed}×: Searching [{min_search:.2f}s, {max_search:.2f}s]")
         
         period, _, _ = detector.detect_periodicity(
             y_stretched, 
