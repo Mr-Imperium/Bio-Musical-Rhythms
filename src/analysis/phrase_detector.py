@@ -7,45 +7,46 @@ class PhraseBoundaryDetector:
         self.sr = sr
 
     def detect_periodicity(self, y, min_period=8.0, max_period=12.0):
+
         hop_length = 2048
     
-    onset_env = librosa.onset.onset_strength(
-        y=y, 
-        sr=self.sr,
-        hop_length=hop_length,
-        aggregate=np.median
-    )
+        onset_env = librosa.onset.onset_strength(
+            y=y, 
+            sr=self.sr,
+            hop_length=hop_length,
+            aggregate=np.median
+        )
     
-    max_lag = int(max_period * self.sr / hop_length)
-    ac = librosa.autocorrelate(onset_env, max_size=max_lag)
+        max_lag = int(max_period * self.sr / hop_length)
+        ac = librosa.autocorrelate(onset_env, max_size=max_lag)
     
-    # Convert lag bins to time
-    times = librosa.frames_to_time(
-        np.arange(len(ac)), 
-        sr=self.sr, 
-        hop_length=hop_length
-    )
+        # Convert lag bins to time
+        times = librosa.frames_to_time(
+            np.arange(len(ac)), 
+            sr=self.sr, 
+            hop_length=hop_length
+        )
     
-    # Search in target window
-    search_mask = (times >= min_period) & (times <= max_period)
+        # Search in target window
+        search_mask = (times >= min_period) & (times <= max_period)
     
-    if not np.any(search_mask):
-        return 0.0, times, ac / ac[0]
+        if not np.any(search_mask):
+            return 0.0, times, ac / ac[0]
     
-    valid_times = times[search_mask]
-    valid_ac = ac[search_mask]
+        valid_times = times[search_mask]
+        valid_ac = ac[search_mask]
     
-    # Find peaks
-    from scipy.signal import find_peaks
-    peaks, _ = find_peaks(valid_ac, prominence=0.05)
+        # Find peaks
+        from scipy.signal import find_peaks
+        peaks, _ = find_peaks(valid_ac, prominence=0.05)
     
-    # Get strongest peak
-    if len(peaks) > 0:
-        strongest_idx = peaks[np.argmax(valid_ac[peaks])]
-        best_period = valid_times[strongest_idx]
-    else:
-        best_period = valid_times[np.argmax(valid_ac)]
+        # Get strongest peak
+        if len(peaks) > 0:
+            strongest_idx = peaks[np.argmax(valid_ac[peaks])]
+            best_period = valid_times[strongest_idx]
+        else:
+            best_period = valid_times[np.argmax(valid_ac)]
     
-    ac_norm = ac / ac[0]
+        ac_norm = ac / ac[0]
     
-    return best_period, times, ac_norm
+        return best_period, times, ac_norm
