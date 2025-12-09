@@ -57,7 +57,8 @@ Figure 1: Structural Analysis (Verdi: Va Pensiero)
 
 The plot below isolates the volume dynamics of the target track.
 
-<img width="3567" height="1585" alt="va_pensiero_analysis" src="https://github.com/user-attachments/assets/c7990e54-c97c-473e-91c0-1cc4a91c2997" />
+<img width="3567" height="1585" alt="va_pensiero_analysis" src="https://github.com/user-attachments/assets/51527af0-a852-47f4-a380-ad68022891e0" />
+
 
 Interpretation:
 
@@ -69,14 +70,16 @@ Engineering Insight: This indicates the dynamic arcs of Va Pensiero span 30-40 s
 
 Figure 2:
  Statistical Comparison (Target vs. Control)
-<img width="2072" height="1561" alt="statistical_boxplot" src="https://github.com/user-attachments/assets/da9e4e2e-aa71-4f67-a28a-7067ebe927da" />
+<img width="2072" height="1561" alt="statistical_boxplot" src="https://github.com/user-attachments/assets/08d7547e-82c3-449a-8772-deed56c522a8" />
+
 
 
 
 ## Dynamic Entrainment Analysis (Time-Frequency)
 Biological signals are **non-stationary**; entrainment is not a constant state but a transient event. To visualize this, we engineered a **Very Low Frequency (VLF) Spectrogram** (0-0.25 Hz).
-<img width="3600" height="1800" alt="heatmap_verdi" src="https://github.com/user-attachments/assets/6ccf4b2e-fa48-4a7d-8c25-f784b0e14c4a" />
-<img width="3600" height="1800" alt="heatmap_bach" src="https://github.com/user-attachments/assets/556ff5e5-5086-4d39-bd4e-0d6557db4fe8" />
+<img width="3600" height="1800" alt="heatmap_verdi" src="https://github.com/user-attachments/assets/0314b691-d789-4292-a3e4-130a125eb90a" />
+<img width="3600" height="1800" alt="heatmap_bach" src="https://github.com/user-attachments/assets/6f6ed52d-fe98-48ea-aee8-d3eca1203251" />
+
 
 
 **Interpretation:**
@@ -90,7 +93,8 @@ Unlike standard audio spectrograms ($0-20$ kHz), this heatmap reveals the "breat
 To bridge the gap between signal processing and physiology, we implemented a **Baroreflex Transfer Function Simulator**. This module predicts a hypothetical Heart Rate (BPM) response curve based on the audio envelope, factoring in:
 *   **Gain**: Sympathetic coupling strength.
 *   **Latency**: The ~5-second delay inherent in the baroreflex loop.
-<img width="3600" height="1500" alt="biomimetic_simulation" src="https://github.com/user-attachments/assets/50b55af3-ddf9-48c9-a211-a4e9704698ce" />
+<img width="3600" height="1500" alt="biomimetic_simulation" src="https://github.com/user-attachments/assets/b8c4cb01-dd69-4fdb-9295-cb66ade72445" />
+
 
 
 
