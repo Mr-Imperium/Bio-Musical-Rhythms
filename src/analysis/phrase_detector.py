@@ -7,18 +7,25 @@ class PhraseBoundaryDetector:
         self.sr = sr
 
     def detect_periodicity(self, y, min_period=8.0, max_period=12.0):
-
-        hop_length = 2048
-    
-        onset_env = librosa.onset.onset_strength(
-            y=y, 
-            sr=self.sr,
-            hop_length=hop_length,
-            aggregate=np.median
-        )
-    
+        """
+        Detect the dominant structural period in the audio using amplitude envelope.
+        
+        Uses RMS energy envelope (not onset strength) to capture volume dynamics
+        that define musical phrase structure. This approach correctly scales with
+        tempo changes because it measures the physical duration of dynamic swells.
+        """
+        hop_length = 512  # Smaller hop for better time resolution
+        
+        # Use RMS amplitude envelope - captures dynamic swells, not note attacks
+        rms = librosa.feature.rms(y=y, frame_length=2048, hop_length=hop_length)[0]
+        
+        # Smooth the envelope to reduce high-frequency noise
+        from scipy.ndimage import uniform_filter1d
+        envelope = uniform_filter1d(rms, size=11)  # ~0.25s smoothing at sr=22050
+        
+        # Compute autocorrelation to find periodic structure
         max_lag = int(max_period * self.sr / hop_length)
-        ac = librosa.autocorrelate(onset_env, max_size=max_lag)
+        ac = librosa.autocorrelate(envelope, max_size=max_lag)
     
         # Convert lag bins to time
         times = librosa.frames_to_time(
