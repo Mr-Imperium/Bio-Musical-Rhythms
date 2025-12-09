@@ -7,12 +7,6 @@ class PhraseBoundaryDetector:
         self.sr = sr
 
     def detect_periodicity(self, y, min_period=8.0, max_period=12.0):
-        """
-        Detect the dominant structural period in the audio using amplitude envelope.
-        
-        Uses RMS energy envelope with parabolic interpolation for sub-frame 
-        precision in peak detection.
-        """
         # Use smaller hop for better temporal resolution
         frame_length = 4096   # ~0.19s at 22050 Hz
         hop_length = 512      # ~0.023s at 22050 Hz - finer resolution

@@ -1,8 +1,3 @@
-"""
-Tests for the phrase detector module.
-Validates that phrase detection correctly scales with tempo changes.
-"""
-
 import unittest
 import numpy as np
 import librosa
@@ -10,19 +5,12 @@ from src.analysis.phrase_detector import PhraseBoundaryDetector
 
 
 class TestPhraseDetector(unittest.TestCase):
-    """Test suite for PhraseBoundaryDetector"""
     
     def setUp(self):
         self.sr = 22050
         self.detector = PhraseBoundaryDetector(sr=self.sr)
     
     def generate_test_signal(self, period_seconds=10.0, duration_seconds=120.0):
-        """
-        Generate a synthetic audio signal with a known amplitude modulation period.
-        
-        This simulates a musical phrase structure where the volume swells and 
-        fades with a specific periodicity.
-        """
         t = np.linspace(0, duration_seconds, int(duration_seconds * self.sr))
         
         # Carrier: Mix of frequencies to simulate music
@@ -45,8 +33,7 @@ class TestPhraseDetector(unittest.TestCase):
         return signal.astype(np.float32)
     
     def test_synthetic_phrase_detection(self):
-        """Test that detector finds the correct period in a synthetic signal."""
-        print("\n🎵 Testing synthetic phrase detection...")
+        print("\n Testing synthetic phrase detection...")
         
         target_period = 10.0
         signal = self.generate_test_signal(period_seconds=target_period)
@@ -66,14 +53,7 @@ class TestPhraseDetector(unittest.TestCase):
             f"Detection error {error:.2f}s exceeds 0.5s threshold")
     
     def test_tempo_invariance(self):
-        """
-        CRITICAL TEST: Verify that detected period scales correctly with tempo changes.
-        
-        If we speed up the signal by 1.2x, the detected period should decrease to 
-        base_period / 1.2. This proves the detector measures structural timing,
-        not spurious artifacts.
-        """
-        print("\n🎵 Testing tempo invariance (CRITICAL)...")
+        print("\n Testing tempo invariance (CRITICAL)...")
         
         base_period = 10.0
         signal = self.generate_test_signal(period_seconds=base_period)
@@ -116,8 +96,7 @@ class TestPhraseDetector(unittest.TestCase):
             "Tempo-invariant detection failed!")
     
     def test_outside_search_window(self):
-        """Test behavior when no valid period is found in the search window."""
-        print("\n🎵 Testing out-of-range detection...")
+        print("\n Testing out-of-range detection...")
         
         # Create signal with 5-second period
         signal = self.generate_test_signal(period_seconds=5.0)

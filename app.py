@@ -265,10 +265,15 @@ with tab3:
 with tab4:    
     st.header("Phrase Structure Detection (Time-Domain)")    
     st.markdown("""    
-    **Direct timing-based detection** of the 10-second 4-phrase units mentioned by Dr. Krishna.        
-    This uses **autocorrelation of the onset envelope**, not frequency analysis,     
+    **This uses **autocorrelation of the onset envelope**, not frequency analysis,     
     to detect structural periodicity in operatic arias.    
     """)        
+
+    uploaded_file_p = st.file_uploader(
+        "Upload an Operatic Aria (WAV, MP3)", 
+        type=["wav", "mp3"], 
+        key="phrase_uploader"
+    ) 
 
     st.markdown("###  Quick Demo")
         
@@ -276,7 +281,10 @@ with tab4:
     demo_files = {
         "La donna è mobile (Pavarotti)": "data/demo/verdi_donna.wav",
         "Va, pensiero (Verdi)": "data/demo/verdi_va_pensiero.wav",
-        "Beethoven 9th Adagio": "data/demo/beethoven_9th_adagio.wav"
+        "Beethoven 9th Adagio": "data/demo/beethoven_9th_adagio.wav",
+        "Bach Cantata 147": "data/demo/bach_cantata_147.wav",
+        "Puccini Nessun Dorma": "data/demo/puccini_nessun_dorma.wav",
+        "Verdi Libiam": "data/demo/verdi_libiam.wav"
     }
 
     demo_option = st.selectbox(
@@ -306,11 +314,7 @@ with tab4:
             else:
                 st.warning(f"Demo file not found at: {demo_path}. Please upload your own audio.")
 
-    uploaded_file_p = st.file_uploader(
-        "Upload an Operatic Aria (WAV, MP3)", 
-        type=["wav", "mp3"], 
-        key="phrase_uploader"
-    )        
+       
 
     if uploaded_file_p is not None:
         with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp_file_p:
