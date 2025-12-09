@@ -10,18 +10,19 @@ class PhraseBoundaryDetector:
         """
         Detect the dominant structural period in the audio using amplitude envelope.
         
-        Uses RMS energy envelope (not onset strength) to capture volume dynamics
-        that define musical phrase structure. This approach correctly scales with
-        tempo changes because it measures the physical duration of dynamic swells.
+        Uses RMS energy envelope with large frame/hop sizes to capture slow 
+        10-second phrase-level dynamic structures.
         """
-        hop_length = 512  # Smaller hop for better time resolution
+        # Large frame and hop to capture slow 10-second structures
+        frame_length = 8192   # ~0.37s at 22050 Hz
+        hop_length = 4096     # ~0.19s at 22050 Hz
         
-        # Use RMS amplitude envelope - captures dynamic swells, not note attacks
-        rms = librosa.feature.rms(y=y, frame_length=2048, hop_length=hop_length)[0]
+        # RMS amplitude envelope - captures dynamic swells that scale with tempo
+        rms = librosa.feature.rms(y=y, frame_length=frame_length, hop_length=hop_length)[0]
         
-        # Smooth the envelope to reduce high-frequency noise
+        # Light smoothing to reduce noise while preserving structure
         from scipy.ndimage import uniform_filter1d
-        envelope = uniform_filter1d(rms, size=11)  # ~0.25s smoothing at sr=22050
+        envelope = uniform_filter1d(rms, size=5)
         
         # Compute autocorrelation to find periodic structure
         max_lag = int(max_period * self.sr / hop_length)
