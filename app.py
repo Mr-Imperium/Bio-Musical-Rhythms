@@ -270,12 +270,13 @@ with tab4:
     to detect structural periodicity in operatic arias.    
     """)        
 
-    st.markdown("### 🎭 Quick Demo")
+    st.markdown("###  Quick Demo")
         
     # Map to your demo files
     demo_files = {
-        "La donna è mobile (Pavarotti)": "data/demo/la_donna_mobile.wav",
-        "Va, pensiero (Verdi)": "data/demo/va_pensiero.wav"
+        "La donna è mobile (Pavarotti)": "data/demo/verdi_donna.wav",
+        "Va, pensiero (Verdi)": "data/demo/verdi_va_pensiero.wav",
+        "Beethoven 9th Adagio": :"data/demo/beethoven_9th_adagio.wav"
     }
 
     demo_option = st.selectbox(
