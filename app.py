@@ -145,6 +145,4 @@ with tab3:
             finally:
                 plt.close(fig_plt)
                 os.remove(temp_path_s)
-        
-        finally:
-            os.remove(temp_path_s)
+    
