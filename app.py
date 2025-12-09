@@ -79,35 +79,35 @@ with tab2:
 
     if st.button("✨ Generate Bio-Resonance Audio"):
         with st.spinner("Synthesizing waveforms..."):
-            # FIX 2: Removed 'sr=44100'
             composer = BioResonanceComposer()
             
-            # Assuming BioResonanceComposer has a 'sr' attribute for visualization
             try:
                 composer_sr = composer.sr 
             except AttributeError:
-                composer_sr = 44100 # Fallback if sr attribute is not present
+                composer_sr = 44100
                 
+            # FIX: Temporarily remove mod_freq and mod_depth to identify the issue
             _, audio_data = composer.generate_therapeutic_drone(
                 duration_sec=duration, 
-                carrier_freq=freq,
-                mod_freq=mod_freq,
-                mod_depth=mod_depth
+                carrier_freq=freq
+                # mod_freq=mod_freq, # Removed
+                # mod_depth=mod_depth # Removed
             )
+            
             out_file = "generated_therapy.wav"
             composer.save_to_disk(audio_data, out_file)
             
             st.success("Audio Generated!")
             st.audio(out_file)
             
-            st.subheader(f"Modulation Visualization (Cycle: {1/mod_freq:.1f} seconds)")
-            # Downsample for plot visualization (100 samples per second)
+            # Note: Visualization will use default mod_freq if none is passed
+            viz_mod_freq = mod_freq # Keep the slider value for display
+            st.subheader(f"Modulation Visualization (Cycle: {1/viz_mod_freq:.1f} seconds)")
+            
             step = composer_sr // 100
             viz_data = audio_data[::step]
-            # Limit to the first 10 cycles for clarity
-            max_points = int(10 * composer_sr * (1 / mod_freq) / step)
+            max_points = int(10 * composer_sr * (1 / viz_mod_freq) / step)
             st.line_chart(viz_data[:max_points])
-
 with tab3:
     st.header("Time-Frequency Structural Analyzer")
     st.markdown("Visualize the fundamental structure of an audio file using a **Spectrogram**.")
