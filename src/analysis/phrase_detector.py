@@ -7,10 +7,6 @@ class PhraseBoundaryDetector:
         self.sr = sr
 
     def detect_periodicity(self, y, min_period=8.0, max_period=12.0):
-    """
-    Detects structural periodicity using time-domain autocorrelation.
-    """
-    # Use longer hop for slow structural features
     hop_length = 2048
     
     onset_env = librosa.onset.onset_strength(
