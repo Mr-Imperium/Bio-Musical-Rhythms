@@ -17,12 +17,128 @@ from src.analysis.signal_processing import SpectralAnalyzer
 from src.analysis.mayer_metric import calculate_mayer_score
 from src.analysis.biomimetic_model import BaroreflexSimulator
 from src.generation.synthesizer import BioResonanceComposer
+from src.analysis.phrase_detector import PhraseBoundaryDetector
+from src.analysis.tempo_validation import validate_tempo_invariance
 
 st.set_page_config(page_title="Bio-Musical Rhythms", page_icon="🫀", layout="wide")
 
 st.title("Bio-Musical Rhythms")
 
-tab1, tab2, tab3 = st.tabs(["📊 Spectral Analyzer", "🎹 Therapeutic Composer", "🏗️ Structural Analyzer"])
+def run_phrase_detection(y_p, sr_p, uploaded_file_name="Uploaded File"):
+    try:
+        # Assuming the necessary import is available
+        from src.analysis.phrase_detector import PhraseBoundaryDetector 
+
+        detector = PhraseBoundaryDetector(sr=sr_p)
+
+        # Detect the period
+        period, times, ac_norm = detector.detect_periodicity(
+            y_p, min_period=8.0, max_period=12.0
+        )
+
+        st.success(f"✓ Analysis Complete: **{uploaded_file_name}**")
+
+        # Display results
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            st.metric(
+                "Detected Period", 
+                f"{period:.2f} seconds",
+                help="The repetition cycle detected via time-domain autocorrelation"
+            )
+
+        with col2:
+            if 9.0 <= period <= 11.0:
+                st.metric(
+                    "Entrainment Potential", 
+                    "✓ HIGH",
+                    delta="Mayer-wave compatible"
+                )
+                st.success("This aria has **cardiovascular entrainment potential**")
+            else:
+                st.metric(
+                    "Entrainment Potential", 
+                    "○ LOW",
+                    delta=f"Off by {abs(period-10.0):.1f}s"
+                )
+                st.info(f"Period is {period:.1f}s (target: 9-11s)")
+
+        with col3:
+            predicted_freq = 1.0 / period if period > 0 else 0
+            st.metric(
+                "Frequency Equivalent",
+                f"{predicted_freq:.3f} Hz",
+                help="The frequency corresponding to this period"
+            )
+
+        # Plot autocorrelation
+        st.subheader("Autocorrelation of Onset Envelope")
+        st.markdown("""
+        **How to read this:** A peak at ~10 seconds indicates strong structural repetition.
+        This is the **timing-based** detection Dr. Krishna requested.
+        """)
+        
+
+        df_ac = pd.DataFrame({
+            "Time Lag (seconds)": times,
+            "Autocorrelation": ac_norm
+        })
+
+        fig_ac = px.line(
+            df_ac, 
+            x="Time Lag (seconds)", 
+            y="Autocorrelation",
+            title="Structural Periodicity Detection"
+        )
+
+        # Highlight the target zone
+        fig_ac.add_vrect(
+            x0=8.0, x1=12.0, 
+            fillcolor="green", 
+            opacity=0.1, 
+            annotation_text="Entrainment Zone (8-12s)",
+            annotation_position="top left"
+        )
+
+        # Mark the detected peak
+        fig_ac.add_vline(
+            x=period, 
+            line_dash="dash", 
+            line_color="red",
+            annotation_text=f"Detected: {period:.2f}s"
+        )
+
+        st.plotly_chart(fig_ac, use_container_width=True)
+
+        # Show interpretation
+        st.subheader("Interpretation")
+        if 9.0 <= period <= 11.0:
+            st.success(f"""
+            ✓ **Entrainment-Inducing Structure Detected**
+            
+            This aria exhibits the ~10-second phrase structure identified in Bernardi et al. (2009):
+            - **Detected period:** {period:.2f} seconds
+            - **Predicted cardiovascular effect:** Enhanced parasympathetic tone, increased HRV
+            - **Mechanism:** Phrase-timing-driven respiratory pacing → baroreflex entrainment
+            """)
+        else:
+            st.info(f"""
+            ○ **Non-Standard Phrase Structure**
+            
+            This aria's {period:.2f}s period falls outside the 9-11s entrainment window:
+            - May not induce Mayer-wave synchronization
+            - Could still have musical/emotional effects through other mechanisms
+            """)
+        
+        return period # Return period for validation step
+    
+    except Exception as e:
+        st.error(f"Error during phrase detection: {e}")
+        st.code(str(e))
+        return None
+
+tab1, tab2, tab3, tab4 = st.tabs(["Spectral Analyzer", "Therapeutic Composer", "Structural Analyzer", "Phrase Structure Detector"])
 
 with tab1:
     st.header("Audio Entrainment Analysis")
@@ -145,4 +261,156 @@ with tab3:
             finally:
                 plt.close(fig_plt)
                 os.remove(temp_path_s)
+
+with tab4:    
+    st.header("Phrase Structure Detection (Time-Domain)")    
+    st.markdown("""    
+    **Direct timing-based detection** of the 10-second 4-phrase units mentioned by Dr. Krishna.        
+    This uses **autocorrelation of the onset envelope**, not frequency analysis,     
+    to detect structural periodicity in operatic arias.    
+    """)        
+
+    st.markdown("### 🎭 Quick Demo")
+        
+    # Map to your demo files
+    demo_files = {
+        "La donna è mobile (Pavarotti)": "data/demo/la_donna_mobile.wav",
+        "Va, pensiero (Verdi)": "data/demo/va_pensiero.wav"
+    }
+
+    demo_option = st.selectbox(
+        "Or try a pre-loaded example:",
+        ["None"] + list(demo_files.keys()),
+        key="phrase_demo_select"
+    )
+    
+    temp_path_p = None
+    uploaded_file_p = None
+
+    if demo_option != "None":
+        st.info(f"Loading demo: {demo_option}")
+                
+        if demo_option in demo_files:
+            demo_path = demo_files[demo_option]
+                        
+            if os.path.exists(demo_path):
+                temp_path_p = demo_path 
+                
+                try:
+                    y_p, sr_p = librosa.load(temp_path_p, sr=22050)
+                    st.session_state["last_audio_data_p"] = (y_p, sr_p, temp_path_p, demo_option)
+                    run_phrase_detection(y_p, sr_p, uploaded_file_name=demo_option)
+                except Exception as e:
+                    st.error(f"Could not load demo file: {e}")
+            else:
+                st.warning(f"Demo file not found at: {demo_path}. Please upload your own audio.")
+
+    uploaded_file_p = st.file_uploader(
+        "Upload an Operatic Aria (WAV, MP3)", 
+        type=["wav", "mp3"], 
+        key="phrase_uploader"
+    )        
+
+    if uploaded_file_p is not None:
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp_file_p:
+            tmp_file_p.write(uploaded_file_p.getbuffer())
+            temp_path_p = tmp_file_p.name
+
+        try:
+            y_p, sr_p = librosa.load(temp_path_p, sr=22050)
+            st.session_state["last_audio_data_p"] = (y_p, sr_p, temp_path_p, uploaded_file_p.name)
+            run_phrase_detection(y_p, sr_p, uploaded_file_name=uploaded_file_p.name)
+            
+        except Exception as e:
+            st.error(f"Error during audio loading/phrase detection: {e}")
+            st.code(str(e))
+        finally:
+            # Clean up the temp file if it was created from upload
+            if temp_path_p and temp_path_p not in demo_files.values():
+                os.remove(temp_path_p)
+                temp_path_p = None
+
+    # Update temp_path_p if data was successfully loaded (either by demo or upload)
+    if "last_audio_data_p" in st.session_state:
+        _y, _sr, temp_path_p, _name = st.session_state["last_audio_data_p"]
+
+    # --- Tempo Validation Demonstration ---
+    st.markdown("---")    
+    st.subheader(" Tempo-Invariance Validation")    
+    st.markdown("""    
+    **Scientific proof** that our method detects **structural timing**, not spectral artifacts.        
+    If we speed up the music by 1.3×, the detected period should scale to ~7.7 seconds.    
+    """)        
+        
+    if "last_audio_data_p" in st.session_state:
+        if st.button(" Run Tempo Validation Test"):        
+            with st.spinner("Testing at multiple speeds..."):            
+                try:                
+                    from src.analysis.tempo_validation import validate_tempo_invariance                                
+                    
+                    # Run validation (uses temp_path_p set by the last successful load/upload)
+                    df_validation = validate_tempo_invariance(
+                        temp_path_p,                     
+                        speed_factors=[0.8, 0.9, 1.0, 1.1, 1.2]
+                    )                                
+                    
+                    st.success("✓ Tempo validation complete")                                
+                    
+                    # Display table
+                    st.dataframe(df_validation, use_container_width=True)                                
+                    
+                    # Plot results
+                    fig_val = go.Figure()                                
+                    
+                    fig_val.add_trace(go.Scatter(
+                        x=df_validation["Speed Factor"],
+                        y=df_validation["Detected Period (s)"],
+                        mode='lines+markers',
+                        name='Detected',
+                        line=dict(color='blue', width=3)
+                    ))                                
+                    
+                    fig_val.add_trace(go.Scatter(
+                        x=df_validation["Speed Factor"],
+                        y=df_validation["Expected Period (s)"],
+                        mode='lines+markers',
+                        name='Expected (10s baseline)',
+                        line=dict(color='red', dash='dash', width=2)
+                    ))                                
+                    
+                    fig_val.update_layout(
+                        title="Tempo Invariance: Detected vs. Expected Period",
+                        xaxis_title="Speed Factor",
+                        yaxis_title="Period (seconds)",
+                        hovermode='x unified'
+                    )                                
+                    
+
+                    st.plotly_chart(fig_val, use_container_width=True)                                
+                    
+                    # Calculate average error
+                    avg_error = df_validation["Error (s)"].mean()
+                    max_error = df_validation["Error (s)"].max()                                
+                    
+                    if avg_error < 0.5:
+                        st.success(f"""
+                        ✓ **Validation Passed**
+                        - Average error: {avg_error:.3f}s
+                        - Maximum error: {max_error:.3f}s
+                        
+                        The method successfully tracks **structural timing** across tempo changes.
+                        """)
+                    else:
+                        st.warning(f"""
+                        ⚠ **High Error Detected**
+                        - Average error: {avg_error:.3f}s
+                        
+                        The method may be picking up spurious artifacts rather than true structure.
+                        """)                                
+                    
+                except Exception as e:                
+                    st.error(f"Validation failed: {e}")
+                    st.code(str(e))
+    else:
+        st.info("Please upload an aria or select a Quick Demo example to enable the Tempo Validation Test.")
     
