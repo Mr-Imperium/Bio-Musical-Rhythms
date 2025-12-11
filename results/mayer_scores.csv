@@ -1,7 +1,0 @@
-id,composer,title,category,mayer_score,peak_freq_hz
-verdi_va_pensiero,Verdi,Va Pensiero (Nabucco),Target,0.1931504109534206,0.029296875
-verdi_libiam,Verdi,Libiam nei lieti calici (La Traviata),Target,0.10897298141046069,0.1953125
-verdi_donna,Verdi,La donna e mobile (Rigoletto),Target,0.21306303982792693,0.029296875
-puccini_nessun_dorma,Puccini,Nessun Dorma (Turandot),Target,0.1406585505450602,0.029296875
-bach_cantata_147,Bach,"Jesu, Joy of Man's Desiring",Control,0.22732642980207557,0.05859375
-beethoven_9th_adagio,Beethoven,Symphony No. 9 (Adagio),Control,0.2217387258126983,0.0390625
