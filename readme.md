@@ -27,7 +27,7 @@ The algorithm achieved an accuracy of **99.5%**, validating that the code correc
 <img width="3000" height="1500" alt="Bee_Gees_-_Stayin_Alive_Official_Music_Video_time" src="https://github.com/user-attachments/assets/32958733-81c2-4057-a028-f1ae2b5a4540" />
 
 
-## 3. Key Findings
+## Key Findings
 
 We analyzed 24 tracks. The pipeline independently verified the 10-second rule for the Bernardi tracks.
 We define Entrainment Compatible as a Structural Period between 8.5s and 11.5s ( +-1.5 tolerance for human performance).
