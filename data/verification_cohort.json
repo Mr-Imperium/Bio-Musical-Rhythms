@@ -1,0 +1,146 @@
+[
+    {
+        "id": "Bee_Gees___Stayin_Alive_Official_Music_Video",
+        "file_path": "data/raw/Bee_Gees_-_Stayin_Alive_Official_Music_Video.wav",
+        "title": "Bee Gees   Stayin Alive Official Music Video",
+        "category": "Music"
+    },
+    {
+        "id": "CLAUDE_DEBUSSY_CLAIR_DE_LUNE",
+        "file_path": "data/raw/CLAUDE_DEBUSSY_CLAIR_DE_LUNE.wav",
+        "title": "CLAUDE DEBUSSY CLAIR DE LUNE",
+        "category": "Music"
+    },
+    {
+        "id": "Dekhi_Jayegi_An_Original_Ghazal_Satish_Raghunathan_Saveri_Verma_Karthika_Vaidyanathan",
+        "file_path": "data/raw/Dekhi_Jayegi_An_Original_Ghazal_Satish_Raghunathan_Saveri_Verma_Karthika_Vaidyanathan.wav",
+        "title": "Dekhi Jayegi An Original Ghazal Satish Raghunathan Saveri Verma Karthika Vaidyanathan",
+        "category": "Music"
+    },
+    {
+        "id": "EVOH\u00c9__SHIVOHAM_official_video",
+        "file_path": "data/raw/EVOH\u00c9-_SHIVOHAM_official_video.wav",
+        "title": "EVOH\u00c9  SHIVOHAM official video",
+        "category": "Music"
+    },
+    {
+        "id": "Experience_Serenity_Best_Gregorian_Chants_Sacred_Music_for_Deep_Prayer_Meditation",
+        "file_path": "data/raw/Experience_Serenity_Best_Gregorian_Chants_Sacred_Music_for_Deep_Prayer_Meditation.wav",
+        "title": "Experience Serenity Best Gregorian Chants Sacred Music for Deep Prayer Meditation",
+        "category": "Music"
+    },
+    {
+        "id": "Gregorian_Chants_Honor_and_Praise_God___Rite_of_Prayer_God_in_the_Monastery",
+        "file_path": "data/raw/Gregorian_Chants_Honor_and_Praise_God_-_Rite_of_Prayer_God_in_the_Monastery.wav",
+        "title": "Gregorian Chants Honor and Praise God   Rite of Prayer God in the Monastery",
+        "category": "Music"
+    },
+    {
+        "id": "Gregorian_Chants_The_Holy_Mass_of_the_Benedictine_Monks_Catholic_Chants_for_Prayer_1_hour",
+        "file_path": "data/raw/Gregorian_Chants_The_Holy_Mass_of_the_Benedictine_Monks_Catholic_Chants_for_Prayer_1_hour.wav",
+        "title": "Gregorian Chants The Holy Mass of the Benedictine Monks Catholic Chants for Prayer 1 hour",
+        "category": "Music"
+    },
+    {
+        "id": "Gregorian_Chants_of_the_Benedictine_Monks_Christian_Music_for_Spiritual_Meditation",
+        "file_path": "data/raw/Gregorian_Chants_of_the_Benedictine_Monks_Christian_Music_for_Spiritual_Meditation.wav",
+        "title": "Gregorian Chants of the Benedictine Monks Christian Music for Spiritual Meditation",
+        "category": "Music"
+    },
+    {
+        "id": "Harivarsanam",
+        "file_path": "data/raw/Harivarsanam.wav",
+        "title": "Harivarsanam",
+        "category": "Music"
+    },
+    {
+        "id": "La_Bouche___Be_My_Lover_Official_Video",
+        "file_path": "data/raw/La_Bouche_-_Be_My_Lover_Official_Video.wav",
+        "title": "La Bouche   Be My Lover Official Video",
+        "category": "Music"
+    },
+    {
+        "id": "La_Traviata_Libiamo_ne_lieti_calici",
+        "file_path": "data/raw/La_Traviata_Libiamo_ne_lieti_calici.wav",
+        "title": "La Traviata Libiamo ne lieti calici",
+        "category": "Music"
+    },
+    {
+        "id": "Luciano_Pavarotti___La_Donna_\u00c8_Mobile_Rigoletto",
+        "file_path": "data/raw/Luciano_Pavarotti_-_La_Donna_\u00c8_Mobile_Rigoletto.wav",
+        "title": "Luciano Pavarotti   La Donna \u00c8 Mobile Rigoletto",
+        "category": "Music"
+    },
+    {
+        "id": "Luciano_Pavarotti_e_Zucchero_in_Va_pensiero_Live",
+        "file_path": "data/raw/Luciano_Pavarotti_e_Zucchero_in_Va_pensiero_Live.wav",
+        "title": "Luciano Pavarotti e Zucchero in Va pensiero Live",
+        "category": "Music"
+    },
+    {
+        "id": "Luciano_Pavarotti_sings_Nessun_dorma_from_Turandot_The_Three_Tenors_in_Concert_1994",
+        "file_path": "data/raw/Luciano_Pavarotti_sings_Nessun_dorma_from_Turandot_The_Three_Tenors_in_Concert_1994.wav",
+        "title": "Luciano Pavarotti sings Nessun dorma from Turandot The Three Tenors in Concert 1994",
+        "category": "Music"
+    },
+    {
+        "id": "Miles_Davis___So_What_Official_Video",
+        "file_path": "data/raw/Miles_Davis_-_So_What_Official_Video.wav",
+        "title": "Miles Davis   So What Official Video",
+        "category": "Music"
+    },
+    {
+        "id": "Puccini___O_mio_babbino_caro_from_Gianni_Schichi_Callas_Philharmonia_Orchestra_Serafin_HD",
+        "file_path": "data/raw/Puccini_-_O_mio_babbino_caro_from_Gianni_Schichi_Callas_Philharmonia_Orchestra_Serafin_HD.wav",
+        "title": "Puccini   O mio babbino caro from Gianni Schichi Callas Philharmonia Orchestra Serafin HD",
+        "category": "Music"
+    },
+    {
+        "id": "Queen_Bohemian_Rhapsody_Official_Video_Remastered",
+        "file_path": "data/raw/Queen_Bohemian_Rhapsody_Official_Video_Remastered.wav",
+        "title": "Queen Bohemian Rhapsody Official Video Remastered",
+        "category": "Music"
+    },
+    {
+        "id": "Rachid_Taha___Rock_El_Casbah",
+        "file_path": "data/raw/Rachid_Taha_-_Rock_El_Casbah.wav",
+        "title": "Rachid Taha   Rock El Casbah",
+        "category": "Music"
+    },
+    {
+        "id": "Sunta_Hai_Guru_Gyaani_sings_Pt_Kumar_Gandharva",
+        "file_path": "data/raw/Sunta_Hai_Guru_Gyaani_sings_Pt_Kumar_Gandharva.wav",
+        "title": "Sunta Hai Guru Gyaani sings Pt Kumar Gandharva",
+        "category": "Music"
+    },
+    {
+        "id": "The_Calm_Of_Benedictine_Monks_Singing_Gregorian_Chants_In_A_Cathedral",
+        "file_path": "data/raw/The_Calm_Of_Benedictine_Monks_Singing_Gregorian_Chants_In_A_Cathedral.wav",
+        "title": "The Calm Of Benedictine Monks Singing Gregorian Chants In A Cathedral",
+        "category": "Music"
+    },
+    {
+        "id": "The_Reverent_Calm_Of_Nuns_Singing_Gregorian_Chants",
+        "file_path": "data/raw/The_Reverent_Calm_Of_Nuns_Singing_Gregorian_Chants.wav",
+        "title": "The Reverent Calm Of Nuns Singing Gregorian Chants",
+        "category": "Music"
+    },
+    {
+        "id": "The_beauty_of_the_Kyrie_Eleison_taken_from_the_Missa_De_Angelis_in_Gregorian_Chant",
+        "file_path": "data/raw/The_beauty_of_the_Kyrie_Eleison_taken_from_the_Missa_De_Angelis_in_Gregorian_Chant.wav",
+        "title": "The beauty of the Kyrie Eleison taken from the Missa De Angelis in Gregorian Chant",
+        "category": "Music"
+    },
+    {
+        "id": "Whispers_of_Eldritch_Blast_original",
+        "file_path": "data/raw/Whispers_of_Eldritch_Blast_original.wav",
+        "title": "Whispers of Eldritch Blast original",
+        "category": "Music"
+    },
+    {
+        "id": "\u0d30\u0d2e\u0d15\u0d25_\u0d17\u0d28\u0d32\u0d2f_Raamakadha_Gaanalayam_Bharatham_Mohanlal_Urvasi_Malayalam_Film_Classical_Song",
+        "file_path": "data/raw/\u0d30\u0d2e\u0d15\u0d25_\u0d17\u0d28\u0d32\u0d2f_Raamakadha_Gaanalayam_Bharatham_Mohanlal_Urvasi_Malayalam_Film_Classical_Song.wav",
+        "title": "\u0d30\u0d2e\u0d15\u0d25 \u0d17\u0d28\u0d32\u0d2f Raamakadha Gaanalayam Bharatham Mohanlal Urvasi Malayalam Film Classical Song",
+        "category": "Music"
+    }
+]
